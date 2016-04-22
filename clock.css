@@ -1,0 +1,63 @@
+body {
+    background:maroon;
+    margin: 0;
+    min-width: 120px;
+}
+
+#wrapper {
+    background: darkgoldenrod;
+    min-width: 120px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 12px;
+    padding-top: 0px;
+    float: top;
+}
+
+.copy {
+    font-weight:bold;
+    font-size:larger;
+}
+
+#totalTime {
+    border-style: dashed;
+    background: inherit;
+    font-style: italic;
+    align-content: center;
+    text-align: center;
+}
+
+.money:before {
+    content:"$"
+}
+
+.person:hover {
+    border-style:outset;
+}
+
+.person {
+    border-style: solid;
+    border: .5px solid #333;
+    padding: 12px;
+    margin: 12px;
+    display: inline-block;
+    border-radius: 2px;
+    min-width: 100px;
+    min-height: 80px;
+}
+
+.person .salary {
+    font-size: larger;
+    font-style: italic;
+    text-align: center;
+}
+
+.person .count {
+    font-size:x-large;
+    text-align: center;
+}
+
+#start {
+    float:right;
+    font-size: larger;
+}

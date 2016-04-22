@@ -1,0 +1,88 @@
+Go-mithril and Moria
+Write your frontends like your backends.
+16:06 22 Apr 2016
+Tags: GopherJS, Go, Mithril, MVC Frameworks
+
+Danver Braganza
+Software Engineer, Hipmunk
+danver@hipmunk.com
+http://danverbraganza.com
+
+* Everybody wants to be full stack
+
+But nobody wants to learn no heavy-ass frameworks.
+
+- building fullstack applications can be difficult.
+- A lot of domain specific knowledge on each component
+- JS is de-facto king of front-end
+- Essentially 2x the knowledge
+
+.iframe hipmunk.com/admin/experiments
+
+* Rise of the Client-Side MVC frameworks
+
+- React is the poster child for this
+- But there are others
+- Enhance reuse, separation of concerns
+
+* "Isomorphic" application
+
+-  A word deadened by overuse for, as I see it, two related use cases.
+
+-- Run your page rendering on the backend, to speed up your app.
+
+--- _Usually using node.js. Like our Markup service_
+
+-- Share your backend model code with the front-end, to speed up your development.
+
+--- _Usually involving transpilers like Google's GWT, Dart, or Gopherjs_
+
+* Enter Go-mithril and Moria
+
+- Start with Go code
+- Target a "native" JS MVC Framework
+
+# TODO: Add a graphviz image here of architecture
+
+* My First TODO app in Mithril
+
+    //model
+    var Page = {
+      list: function() {
+        return m.request({method: "GET", url: "pages.json"});
+      }
+    };
+    var Demo = {
+      //controller
+      controller: function() {
+        var pages = Page.list();
+        return {
+          pages: pages,
+          rotate: function() {
+            pages().push(pages().shift());
+          }
+        }
+      },
+      //view
+      view: function(ctrl) {
+        return m("div", [
+          ctrl.pages().map(function(page) {
+            return m("a", {href: page.url}, page.title);
+          }),
+          m("button", {onclick: ctrl.rotate}, "Rotate links")
+        ]);
+      }
+    };
+    //initialize
+    m.mount(document.getElementById("example"), Demo);
+
+* My First TODO app.
+
+.code github.com/danverbraganza/go-mithril/examples/todo.go
+
+- link goes here.
+
+* A more complete app.
+
+- Not a commentary
+- link goes here
