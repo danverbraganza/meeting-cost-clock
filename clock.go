@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"math"
 	"strconv"
 	"sync"
 	"time"
@@ -14,32 +16,47 @@ import (
 var (
 	m     = moria.M
 	fps30 = time.Tick(time.Second / 30)
+	Selections = map[int]int{}
+	Costs      []float64
 )
 
 type Chooser struct {
-	Costs      []float64
-	Selections map[int]int
 	Duration   time.Duration
 }
 
+func init() {
+	var currentAmount, currentDiff float64 = 20000, 5000
+	for i := 0; i < 23; i++ {
+		currentAmount += currentDiff * float64(i/10+1)
+		Costs = append(Costs, currentAmount)
+	}
+}
+
+
 func (c *Chooser) Controller() moria.Controller {
 	*c = Chooser{}
-	var currentAmount, currentDiff float64 = 20000, 5000
-
-	for i := 0; i < 20; i++ {
-		currentAmount += currentDiff * float64(i/10+1)
-		c.Costs = append(c.Costs, currentAmount)
-	}
-	c.Selections = map[int]int{}
 	c.Duration, _ = time.ParseDuration("1h")
 
 	return c
 }
 
+func FormatDuration(d time.Duration) string {
+	rounder := math.Floor
+	if math.Signbit(d.Hours()) {
+		rounder = math.Ceil
+	}
+
+	return fmt.Sprintf("%02.0f:%02d:%02d:%03d",
+		rounder(d.Hours()),
+		int(math.Abs(d.Minutes())) % 60,
+		int(math.Abs(d.Seconds())) % 60,
+		int(math.Abs(float64(d.Nanoseconds() / 1e6))) % 1000)
+}
+
 // Cost returns the cost per second.
-func (c Chooser) CostPerSecond() (cumulative float64) {
-	for i, cost := range c.Costs {
-		cumulative += float64(c.Selections[i]) * cost
+func CostPerSecond() (cumulative float64) {
+	for i, cost := range Costs {
+		cumulative += float64(Selections[i]) * cost
 	}
 	return cumulative / (2000 * 60 * 60)
 }
@@ -50,51 +67,58 @@ func (c *Chooser) View(x moria.Controller) moria.View {
 
 	return m("div#wrapper", nil,
 		m("h1", nil, moria.S("How much will this meeting cost?")),
-		m("label.copy[for='totalTime']", nil, moria.S("How long is this meeting?")),
-		m("br", nil),
-		m("input#totalTime", js.M{
-			"onchange": mithril.WithAttr("value", func(value string) {
-				if duration, err := time.ParseDuration(value); err == nil {
-					c.Duration = duration
-				}
+		m("div#display", nil,
+			m("label.copy[for='totalTime']", nil, moria.S("LENGTH:")),
+			m("input#totalTime", js.M{
+				"onchange": mithril.WithAttr("value", func(value string) {
+					if duration, err := time.ParseDuration(value); err == nil {
+						c.Duration = duration
+					}
+				}),
+				"value": FormatDuration(c.Duration),
 			}),
-			"value": c.Duration.String(),
-		}),
-		m("a#start", js.M{
+			m("hr", nil),
+			m("div.copy.costIntro", nil, moria.S("COST:")),
+			m("div.cost.money", nil, moria.S(
+				strconv.FormatFloat(
+					c.Duration.Seconds()*CostPerSecond(),
+					'f', 2, 64,
+				),
+			)),
+		),
+		m("button#start.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {
 				mithril.RouteRedirect(
-					"/clock",
+					"/clock/" + c.Duration.String(),
 					js.M{},
 					false,
 				)
 			},
-		}, moria.S("Start the meeting")),
-		m("div.copy.costIntro", nil, moria.S("This is how much this meeting will cost you:")),
-		m("div.cost.money", nil, moria.S(
-			strconv.FormatFloat(
-				c.Duration.Seconds()*c.CostPerSecond(),
-				'f', 2, 64,
-			),
-		)),
+		}, moria.S("Start")),
+
 		m("div.copy#peopleIntro", nil, moria.S("Select the number of attendees:")),
 		moria.F(func(children *[]moria.View) {
-			for i, cost := range c.Costs {
+			for i, cost := range Costs {
 				i_ := i // Create a copy to escape.
 				*children = append(*children, m("div.person", nil,
-					m("div.money.salary", js.M{"onclick": func() { c.Selections[i_]++ }},
-
+					m("div.money.salary", nil,
 						moria.S(strconv.FormatFloat(cost, 'f', 0, 64))),
-					m("div.count", js.M{"onclick": func() {
-						if c.Selections[i_] > 0 {
-							c.Selections[i_]--
+					m("br", nil),
+					m("button.minus", js.M{"onclick": func() {
+						if Selections[i_] > 0 {
+							Selections[i_]--
 						}
-					}},
-						moria.S(strconv.Itoa(c.Selections[i]))),
+					}}, moria.S("\U0001F6B6\u20E0")),
+					m("button.plus", js.M{"onclick": func() { Selections[i_]++ }}, moria.S("\U0001F6B6\U0001F6B6")),
+					m("div.count", nil,
+						moria.S(strconv.Itoa(Selections[i]))),
+
 				))
 			}
 		}))
 }
+
 
 type Clock struct {
 	sync.Mutex
@@ -104,7 +128,8 @@ type Clock struct {
 }
 
 func (c *Clock) Controller() moria.Controller {
-	c.left, _ = time.ParseDuration("1h")
+	duration := mithril.RouteParam("duration").(string)
+	c.left, _ = time.ParseDuration(duration)
 	c.Start()
 	return c
 }
@@ -132,15 +157,31 @@ func (c *Clock) Stop() {
 }
 
 func (c *Clock) View(ctrl moria.Controller) moria.View {
-	return m("div#wrapper", nil,
-		m("div#clock", js.M{
-			"onclick": func() {
-				c.running = !c.running
-			},
-		},
-			moria.S(c.left.String())),
+	styleRed := js.M{}
+	if c.left.Seconds() < 0 {
+		styleRed["style"] = "color:darkred;"
+	}
 
-		m("a#pause", js.M{
+	pauseSigil := moria.S("\u23F8")
+	if !c.running {
+		pauseSigil = moria.S("\u25B6")
+	}
+
+	return m("div#wrapper", nil,
+		m("h1", nil, moria.S("How much will this meeting cost?")),
+		m("div#display", nil,
+			m("label.copy[for='totalTime']", nil, moria.S("LENGTH:")),
+			m("input#totalTime", js.M{
+				"value": FormatDuration(c.left),
+				"style": styleRed["style"],
+			}),
+			m("hr", nil),
+			m("div.copy.costIntro", nil, moria.S("COST:")),
+			m("div.cost.money", styleRed,
+				moria.S(strconv.FormatFloat(c.left.Seconds() * CostPerSecond(),
+					'f', 2, 64)),
+			)),
+		m("button#pause.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {
 				if c.running {
@@ -149,9 +190,8 @@ func (c *Clock) View(ctrl moria.Controller) moria.View {
 					c.Start()
 				}
 			},
-		}, moria.S("Pause/Unpause")),
-
-		m("a#stop", js.M{
+		}, pauseSigil),
+		m("button#stop.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {
 				c.Stop()
@@ -161,8 +201,8 @@ func (c *Clock) View(ctrl moria.Controller) moria.View {
 					false,
 				)
 			},
-		}, moria.S("Stop the meeting")))
-
+		},
+			moria.S("\u25a0")))
 }
 
 func main() {
@@ -173,6 +213,6 @@ func main() {
 		dom.GetWindow().Document().QuerySelector("body"), "/",
 		map[string]moria.Component{
 			"/":      myComponent,
-			"/clock": myClock,
+			"/clock/:duration": myClock,
 		})
 }

@@ -1,17 +1,27 @@
-body {
-    background:maroon;
-    margin: 0;
+body,html {
+    background:lightgrey;
     min-width: 120px;
+    color: #eee;
+    font-family: sans-serif;
+    height: 100%;
+    margin:  0px auto;
+    padding: 0px auto
 }
 
 #wrapper {
-    background: darkgoldenrod;
+    position: relative;
+    background: #222;
     min-width: 120px;
     max-width: 600px;
-    margin: 0 auto;
-    padding: 12px;
-    padding-top: 0px;
-    float: top;
+    margin: 0px auto;
+    height: auto;
+    min-height: 100%;
+    padding: 0px auto;
+}
+
+h1 {
+    margin: 0px;
+    padding: 10px;
 }
 
 .copy {
@@ -19,11 +29,33 @@ body {
     font-size:larger;
 }
 
+#display {
+    background: #ccc;
+    border: ridge #eee 4px;
+    padding: 4px;
+    margin: 10px;
+    color: #111;
+    font-family: "Press Start 2P", sans-serif;
+    line-height: 2;
+}
+
+#display hr {
+    style: single;
+}
+
+#display .cost {
+    font-size: 28px;
+    margin: auto;
+    content-align: center;
+    text-align: center;
+}
+
 #totalTime {
-    border-style: dashed;
     background: inherit;
-    font-style: italic;
+    border: none;
+    font-size: 28px;
     align-content: center;
+    font-family: "Press Start 2P", sans-serif;
     text-align: center;
 }
 
@@ -33,22 +65,21 @@ body {
 
 .person:hover {
     border-style:outset;
+
 }
 
 .person {
-    border-style: solid;
-    border: .5px solid #333;
-    padding: 12px;
+    border: 5px double #ddd;
+    padding: 8px;
     margin: 12px;
     display: inline-block;
-    border-radius: 2px;
+    border-radius: 10px;
     min-width: 100px;
     min-height: 80px;
 }
 
 .person .salary {
     font-size: larger;
-    font-style: italic;
     text-align: center;
 }
 
@@ -57,7 +88,34 @@ body {
     text-align: center;
 }
 
+.minus {
+    float:left;
+}
+
+.plus {
+    float: right;
+}
+
+
+.control {
+    border-radius: 10px;
+    font-size: larger;
+    padding: 8px;
+    margin: 12px;
+    min-width: 100px;
+    min-height: 80px;
+}
+
 #start {
     float:right;
-    font-size: larger;
 }
+
+#pause {
+    float: left;
+    margin: 40px;
+    font-size: largest;
+       }
+#stop {
+    margin: 40px;float:right;
+    font-size: largest;
+      }

@@ -1,5 +1,5 @@
 Go-mithril and Moria
-Write your frontends like your backends.
+Write your frontends like your backends
 16:06 22 Apr 2016
 Tags: GopherJS, Go, Mithril, MVC Frameworks
 
@@ -7,6 +7,7 @@ Danver Braganza
 Software Engineer, Hipmunk
 danver@hipmunk.com
 http://danverbraganza.com
+https://github.com/danverbraganza/go-mithril/
 
 * Everybody wants to be full stack
 
@@ -17,72 +18,47 @@ But nobody wants to learn no heavy-ass frameworks.
 - JS is de-facto king of front-end
 - Essentially 2x the knowledge
 
-.iframe hipmunk.com/admin/experiments
+* A case study in ugliness
+
+.iframe https://hipmunk.com/admin/experiments 600 800
 
 * Rise of the Client-Side MVC frameworks
 
 - React is the poster child for this
-- But there are others
+- But there are a lot of others
+- I'm not kidding! [[https://github.com/showcases/front-end-javascript-frameworks]]
 - Enhance reuse, separation of concerns
 
 * "Isomorphic" application
 
--  A word deadened by overuse for, as I see it, two related use cases.
+A word deadened by overuse for, as I see it, two related use cases.
 
--- Run your page rendering on the backend, to speed up your app.
+- Run your page rendering on the backend, to speed up your app.
+_Usually_using_node.js,_like_our_Markup_service_
 
---- _Usually using node.js. Like our Markup service_
-
--- Share your backend model code with the front-end, to speed up your development.
-
---- _Usually involving transpilers like Google's GWT, Dart, or Gopherjs_
+- Share your backend model code with the front-end, to speed up your development.
+_Usually_involving_transpilers_like_Google's_GWT,_Dart,_or_Gopherjs_
 
 * Enter Go-mithril and Moria
 
 - Start with Go code
 - Target a "native" JS MVC Framework
 
-# TODO: Add a graphviz image here of architecture
+.image clock.png
 
-* My First TODO app in Mithril
+* My First To Do app in Mithril
 
-    //model
-    var Page = {
-      list: function() {
-        return m.request({method: "GET", url: "pages.json"});
-      }
-    };
-    var Demo = {
-      //controller
-      controller: function() {
-        var pages = Page.list();
-        return {
-          pages: pages,
-          rotate: function() {
-            pages().push(pages().shift());
-          }
-        }
-      },
-      //view
-      view: function(ctrl) {
-        return m("div", [
-          ctrl.pages().map(function(page) {
-            return m("a", {href: page.url}, page.title);
-          }),
-          m("button", {onclick: ctrl.rotate}, "Rotate links")
-        ]);
-      }
-    };
-    //initialize
-    m.mount(document.getElementById("example"), Demo);
+.link http://jsfiddle.net/fbgypzbr/16/
 
-* My First TODO app.
+* My First To Do app in Mithril Go
 
-.code github.com/danverbraganza/go-mithril/examples/todo.go
+- Demo
+.link http://stormhold.local:8081/github.com/danverbraganza/go-mithril/examples/todo/todo.html
 
-- link goes here.
+- Code
+.link https://github.com/danverbraganza/go-mithril/blob/master/examples/todo/todo.go
 
 * A more complete app.
 
 - Not a commentary
-- link goes here
+.link http://stormhold.local:8081/clock/clock.html?/
