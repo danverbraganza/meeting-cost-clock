@@ -98,17 +98,17 @@ func (c *Chooser) View(x moria.Controller) moria.View {
 		m("div.copy#peopleIntro", nil, moria.S("Select the number of attendees:")),
 		moria.F(func(children *[]moria.View) {
 			for i, cost := range Costs {
-				i_ := i // Create a copy to escape.
+				i := i // Create a copy to escape.
 				*children = append(*children, m("div.person", nil,
 					m("div.money.salary", nil,
 						moria.S(strconv.FormatFloat(cost, 'f', 0, 64))),
 					m("br", nil),
 					m("button.minus", js.M{"onclick": func() {
-						if Selections[i_] > 0 {
-							Selections[i_]--
+						if Selections[i] > 0 {
+							Selections[i]--
 						}
 					}}, moria.S("\U0001F6B6\u20E0")),
-					m("button.plus", js.M{"onclick": func() { Selections[i_]++ }}, moria.S("\U0001F6B6\U0001F6B6")),
+					m("button.plus", js.M{"onclick": func() { Selections[i]++ }}, moria.S("\U0001F6B6\U0001F6B6")),
 					m("div.count", nil,
 						moria.S(strconv.Itoa(Selections[i]))),
 				))
