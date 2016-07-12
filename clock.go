@@ -14,14 +14,14 @@ import (
 )
 
 var (
-	m     = moria.M
-	fps30 = time.Tick(time.Second / 30)
+	m          = moria.M
+	fps30      = time.Tick(time.Second / 30)
 	Selections = map[int]int{}
 	Costs      []float64
 )
 
 type Chooser struct {
-	Duration   time.Duration
+	Duration time.Duration
 }
 
 func init() {
@@ -31,7 +31,6 @@ func init() {
 		Costs = append(Costs, currentAmount)
 	}
 }
-
 
 func (c *Chooser) Controller() moria.Controller {
 	*c = Chooser{}
@@ -48,9 +47,9 @@ func FormatDuration(d time.Duration) string {
 
 	return fmt.Sprintf("%02.0f:%02d:%02d:%03d",
 		rounder(d.Hours()),
-		int(math.Abs(d.Minutes())) % 60,
-		int(math.Abs(d.Seconds())) % 60,
-		int(math.Abs(float64(d.Nanoseconds() / 1e6))) % 1000)
+		int(math.Abs(d.Minutes()))%60,
+		int(math.Abs(d.Seconds()))%60,
+		int(math.Abs(float64(d.Nanoseconds()/1e6)))%1000)
 }
 
 // Cost returns the cost per second.
@@ -63,7 +62,6 @@ func CostPerSecond() (cumulative float64) {
 
 // TODO(danver): Use a Controller PER tier.
 func (c *Chooser) View(x moria.Controller) moria.View {
-	// TODO(danver): Do NOT use c, but x.
 
 	return m("div#wrapper", nil,
 		m("h1", nil, moria.S("How much will this meeting cost?")),
@@ -90,7 +88,7 @@ func (c *Chooser) View(x moria.Controller) moria.View {
 			"config": mithril.RouteConfig,
 			"onclick": func() {
 				mithril.RouteRedirect(
-					"/clock/" + c.Duration.String(),
+					"/clock/"+c.Duration.String(),
 					js.M{},
 					false,
 				)
@@ -113,12 +111,10 @@ func (c *Chooser) View(x moria.Controller) moria.View {
 					m("button.plus", js.M{"onclick": func() { Selections[i_]++ }}, moria.S("\U0001F6B6\U0001F6B6")),
 					m("div.count", nil,
 						moria.S(strconv.Itoa(Selections[i]))),
-
 				))
 			}
 		}))
 }
-
 
 type Clock struct {
 	sync.Mutex
@@ -135,10 +131,11 @@ func (c *Clock) Controller() moria.Controller {
 }
 
 func (c *Clock) Start() {
-	defer c.Unlock()
 	c.Lock()
+	defer c.Unlock()
 	c.last = time.Now()
 	c.running = true
+
 	go func() {
 		for c.running {
 			<-fps30
@@ -151,8 +148,8 @@ func (c *Clock) Start() {
 }
 
 func (c *Clock) Stop() {
-	defer c.Unlock()
 	c.Lock()
+	defer c.Unlock()
 	c.running = false
 }
 
@@ -178,7 +175,7 @@ func (c *Clock) View(ctrl moria.Controller) moria.View {
 			m("hr", nil),
 			m("div.copy.costIntro", nil, moria.S("COST:")),
 			m("div.cost.money", styleRed,
-				moria.S(strconv.FormatFloat(c.left.Seconds() * CostPerSecond(),
+				moria.S(strconv.FormatFloat(c.left.Seconds()*CostPerSecond(),
 					'f', 2, 64)),
 			)),
 		m("button#pause.control", js.M{
@@ -212,7 +209,7 @@ func main() {
 	moria.Route(
 		dom.GetWindow().Document().QuerySelector("body"), "/",
 		map[string]moria.Component{
-			"/":      myComponent,
+			"/":                myComponent,
 			"/clock/:duration": myClock,
 		})
 }
