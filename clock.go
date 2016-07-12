@@ -35,7 +35,6 @@ func init() {
 func (c *Chooser) Controller() moria.Controller {
 	*c = Chooser{}
 	c.Duration, _ = time.ParseDuration("1h")
-
 	return c
 }
 
@@ -60,9 +59,8 @@ func CostPerSecond() (cumulative float64) {
 	return cumulative / (2000 * 60 * 60)
 }
 
-// TODO(danver): Use a Controller PER tier.
-func (c *Chooser) View(x moria.Controller) moria.View {
-
+func (*Chooser) View(x moria.Controller) moria.View {
+	c := x.(*Chooser)
 	return m("div#wrapper", nil,
 		m("h1", nil, moria.S("How much will this meeting cost?")),
 		m("div#display", nil,
@@ -153,7 +151,9 @@ func (c *Clock) Stop() {
 	c.running = false
 }
 
-func (c *Clock) View(ctrl moria.Controller) moria.View {
+func (*Clock) View(ctrl moria.Controller) moria.View {
+	c := ctrl.(*Clock)
+
 	styleRed := js.M{}
 	if c.left.Seconds() < 0 {
 		styleRed["style"] = "color:darkred;"
