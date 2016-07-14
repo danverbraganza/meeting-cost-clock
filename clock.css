@@ -1,11 +1,11 @@
 body,html {
-    background:lightgrey;
+    background: lightgrey;
     min-width: 120px;
     color: #eee;
     font-family: sans-serif;
     height: 100%;
     margin:  0px auto;
-    padding: 0px auto
+    padding: 5px auto
 }
 
 #wrapper {
@@ -30,8 +30,7 @@ h1 {
 }
 
 #display {
-    background: #ccc;
-    border: ridge #eee 4px;
+    background: #fff;
     padding: 4px;
     margin: 10px;
     color: #111;
@@ -69,7 +68,7 @@ h1 {
 }
 
 .person {
-    border: 5px double #ddd;
+    border: 1px solid #ddd;
     padding: 8px;
     margin: 12px;
     display: inline-block;
