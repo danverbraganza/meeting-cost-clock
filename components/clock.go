@@ -89,7 +89,7 @@ func (*Clock) View(ctrl moria.Controller) moria.View {
 			m("tr", nil,
 				m("label.copy[for='totalTime']", nil, moria.S("Time Elapsed")),
 				m("input#totalTime", js.M{
-					"value": FormatDuration(c.timeSpent),
+					"value": timefuncs.FormatDuration(c.timeSpent),
 					"style": maybeRed["style"],
 				})),
 			m("tr", nil,
