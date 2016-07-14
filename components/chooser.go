@@ -77,7 +77,7 @@ func (*Chooser) View(x moria.Controller) moria.View {
 						"",
 						"clock",
 						c.Duration.String(),
-						c.Cost().String(),
+						c.Cost().FloatStr(),
 					},
 						"/"),
 					js.M{},
