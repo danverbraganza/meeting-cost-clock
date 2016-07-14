@@ -19,7 +19,9 @@ type Chooser struct {
 }
 
 func (c *Chooser) Controller() moria.Controller {
-	*c = Chooser{Selections: map[int]int{}}
+	if c.Selections == nil {
+		c.Selections = map[int]int{}
+	}
 	c.Duration, _ = time.ParseDuration("1h")
 	return c
 }
@@ -77,7 +79,8 @@ func (*Chooser) View(x moria.Controller) moria.View {
 						"",
 						"clock",
 						c.Duration.String(),
-						c.Cost().String()},
+						c.Cost().String(),
+					},
 						"/"),
 					js.M{},
 					false,
