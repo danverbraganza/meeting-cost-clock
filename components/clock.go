@@ -73,9 +73,9 @@ func (c *Clock) MoneySpent() timefuncs.Amount {
 func (*Clock) View(ctrl moria.Controller) moria.View {
 	c := ctrl.(*Clock)
 
-	styleRed := js.M{}
+	maybeRed := js.M{}
 	if c.timeSpent > c.totalTime {
-		styleRed["style"] = "color:darkred;"
+		maybeRed["style"] = "color:darkred;"
 	}
 
 	pauseSigil := moria.S("\u23F8")
@@ -84,18 +84,19 @@ func (*Clock) View(ctrl moria.Controller) moria.View {
 	}
 
 	return m("div#wrapper", nil,
-		m("h1", nil, moria.S("How much will this meeting cost?")),
-		m("div#display", nil,
-			m("label.copy[for='totalTime']", nil, moria.S("LENGTH:")),
-			m("input#totalTime", js.M{
-				"value": FormatDuration(c.timeSpent),
-				"style": styleRed["style"],
-			}),
-			m("hr", nil),
-			m("div.copy.costIntro", nil, moria.S("COST:")),
-			m("div.cost.money", styleRed,
-				moria.S(c.MoneySpent().String())),
-		),
+		m("h1", nil, moria.S("How much is this meeting costing?")),
+		m("table#display", nil,
+			m("tr", nil,
+				m("label.copy[for='totalTime']", nil, moria.S("Time Elapsed")),
+				m("input#totalTime", js.M{
+					"value": FormatDuration(c.timeSpent),
+					"style": maybeRed["style"],
+				})),
+			m("tr", nil,
+				m("label.copy.costIntro", nil, moria.S("Cost")),
+				m("span.cost.money", maybeRed,
+					moria.S(c.MoneySpent().String())),
+			)),
 		m("button#pause.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {

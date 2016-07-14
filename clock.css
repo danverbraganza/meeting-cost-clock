@@ -1,120 +1,108 @@
 body,html {
-    background: lightgrey;
     min-width: 120px;
-    color: #eee;
     font-family: sans-serif;
     height: 100%;
     margin:  0px auto;
-    padding: 5px auto
+    background: lightblue;
 }
 
 #wrapper {
+    background: white;
     position: relative;
-    background: #222;
     min-width: 120px;
     max-width: 600px;
     margin: 0px auto;
     height: auto;
+    padding: 10px;
     min-height: 100%;
-    padding: 0px auto;
+    content-align: center;
 }
 
 h1 {
-    margin: 0px;
     padding: 10px;
+    margin: 0px auto;
+    text-decoration: italic;
 }
 
 .copy {
-    font-weight:bold;
-    font-size:larger;
+    font-weight: bold;
+    font-size: larger;
 }
 
 #display {
-    background: #fff;
-    padding: 4px;
-    margin: 10px;
-    color: #111;
-    font-family: "Press Start 2P", sans-serif;
-    line-height: 2;
+    padding: auto;
 }
 
-#display hr {
-    style: single;
-}
-
-#display .cost {
+.cost {
     font-size: 28px;
-    margin: auto;
-    content-align: center;
-    text-align: center;
+    float: right;
 }
 
 #totalTime {
     background: inherit;
-    border: none;
     font-size: 28px;
-    align-content: center;
-    font-family: "Press Start 2P", sans-serif;
-    text-align: center;
+    text-align: right;
+    align-content: right;
 }
 
 .money:before {
     content:"$"
 }
 
-.person:hover {
-    border-style:outset;
-
+.chooser {
+    border: solid 1px black;
+    border-collapse: collapse;
+    margin: auto;
+    padding: 10px;
+    min-width: 100%;
 }
 
-.person {
-    border: 1px solid #ddd;
-    padding: 8px;
-    margin: 12px;
-    display: inline-block;
-    border-radius: 10px;
-    min-width: 100px;
-    min-height: 80px;
+
+.chooser td,th {
+    border: solid 1px darkgrey;
+    padding: 5px ;
+}
+
+.chooser th {
+    background: skyblue;
+}
+
+.chooser tr:nth-child(2n+1) {
+    background: #eee;
 }
 
 .person .salary {
     font-size: larger;
-    text-align: center;
+    text-align: right;
 }
 
-.person .count {
+.count {
     font-size:x-large;
-    text-align: center;
+    text-align: right;
+    border: none;
+    margin: none;
+    padding: none;
+    background: inherit;
 }
-
-.minus {
-    float:left;
-}
-
-.plus {
-    float: right;
-}
-
 
 .control {
-    border-radius: 10px;
     font-size: larger;
     padding: 8px;
     margin: 12px;
-    min-width: 100px;
-    min-height: 80px;
+    min-width: 200px;
 }
 
 #start {
-    float:right;
 }
 
 #pause {
     float: left;
     margin: 40px;
     font-size: largest;
-       }
+}
+
 #stop {
-    margin: 40px;float:right;
+    margin: 40px;
+    float:right;
     font-size: largest;
-      }
+}

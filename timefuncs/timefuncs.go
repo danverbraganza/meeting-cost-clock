@@ -18,7 +18,6 @@ type Amount float64
 
 func (a Amount) String() string {
 	return strconv.FormatFloat(float64(a), 'f', 2, 64)
-
 }
 
 // Cost returns the cost per second of a given set of selections.

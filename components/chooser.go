@@ -49,21 +49,24 @@ func (*Chooser) View(x moria.Controller) moria.View {
 	c := x.(*Chooser)
 	return m("div#wrapper", nil,
 		m("h1", nil, moria.S("How much will this meeting cost?")),
-		m("div#display", nil,
-			m("label.copy[for='totalTime']", nil, moria.S("LENGTH:")),
-			m("input#totalTime", js.M{
-				"onchange": mithril.WithAttr("value", func(value string) {
-					if duration, err := time.ParseDuration(value); err == nil {
-						c.Duration = duration
-					}
-				}),
-				"value": FormatDuration(c.Duration),
-			}),
-			m("hr", nil),
-			m("div.copy.costIntro", nil, moria.S("COST:")),
-			m("div.cost.money", nil, moria.S(
-				c.Cost().String(),
-			)),
+		m("table#display", nil,
+			m("tr", nil,
+				m("td", nil, m("label.copy[for='totalTime']", nil, moria.S("Length"))),
+				m("td", nil, m("input#totalTime", js.M{
+					"onchange": mithril.WithAttr("value", func(value string) {
+						if duration, err := time.ParseDuration(value); err == nil {
+							c.Duration = duration
+						}
+					}),
+					"value": c.Duration.String(),
+				})),
+			),
+			m("tr", nil,
+				m("td", nil,
+					m("label.copy.costIntro", nil, moria.S("Cost"))),
+				m("td", nil, m("span.cost.money", nil, moria.S(
+					c.Cost().String()))),
+			),
 		),
 		m("button#start.control", js.M{
 			"config": mithril.RouteConfig,
@@ -83,23 +86,26 @@ func (*Chooser) View(x moria.Controller) moria.View {
 			},
 		}, moria.S("Start")),
 
-		m("div.copy#peopleIntro", nil, moria.S("Select the number of attendees:")),
-		moria.F(func(children *[]moria.View) {
-			for i, cost := range timefuncs.Costs() {
-				i := i // Create a copy to escape.
-				*children = append(*children, m("div.person", nil,
-					m("div.money.salary", nil,
-						moria.S(cost.Display)),
-					m("br", nil),
-					m("button.minus", js.M{"onclick": func() {
-						if c.Selections[i] > 0 {
-							c.Selections[i]--
-						}
-					}}, moria.S("\U0001F6B6\u20E0")),
-					m("button.plus", js.M{"onclick": func() { c.Selections[i]++ }}, moria.S("\U0001F6B6\U0001F6B6")),
-					m("div.count", nil,
-						moria.S(strconv.Itoa(c.Selections[i]))),
-				))
-			}
-		}))
+		m("div.copy#peopleIntro", nil, moria.S("Add or remove paid attendees")),
+		m("table.chooser", nil,
+			m("tr", nil,
+				m("th[tablewidth='1']", nil, moria.S("Salary")),
+				m("th[tablewidth='1']", nil, moria.S("Count")),
+			),
+			moria.F(func(children *[]moria.View) {
+				for i, cost := range timefuncs.Costs() {
+					i := i // Create a copy to escape.
+					*children = append(*children, m("tr.person", nil,
+						m("td.money.salary", nil,
+							moria.S(cost.Display)),
+						m("td.count", nil,
+							m("input[type='number'][min='0'].count", js.M{
+								"value": c.Selections[i],
+								"onchange": mithril.WithAttr("value", func(value string) {
+									if intValue, err := strconv.Atoi(value); err == nil {
+										c.Selections[i] = intValue
+									}
+								})}))))
+				}
+			})))
 }
