@@ -22,7 +22,9 @@ func (c *Chooser) Controller() moria.Controller {
 	if c.Selections == nil {
 		c.Selections = map[int]int{}
 	}
-	c.Duration, _ = time.ParseDuration("1h")
+	if c.Duration == 0*time.Second {
+		c.Duration, _ = time.ParseDuration("1h")
+	}
 	return c
 }
 
