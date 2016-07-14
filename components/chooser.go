@@ -69,13 +69,6 @@ func (*Chooser) View(x moria.Controller) moria.View {
 			"config": mithril.RouteConfig,
 			"onclick": func() {
 
-				fmt.Println(strings.Join([]string{
-					"",
-					"clock",
-					c.Duration.String(),
-					c.Cost().String()},
-					"/"))
-
 				mithril.RouteRedirect(
 					strings.Join([]string{
 						"",

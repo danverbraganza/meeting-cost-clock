@@ -1,7 +1,6 @@
 package components
 
 import (
-	"fmt"
 	"meeting-cost-clock/timefuncs"
 	"strconv"
 	"sync"
@@ -33,8 +32,6 @@ func (c *Clock) Controller() moria.Controller {
 		64,
 	) // Ignoring error: 0 cost per second is valid if not passed.
 	c.totalCost = timefuncs.Amount(totalCost)
-
-	fmt.Println(mithril.RouteParam("cost").(string), c.totalCost)
 
 	var err error
 	c.totalTime, err = time.ParseDuration(duration)
@@ -70,18 +67,11 @@ func (c *Clock) Stop() {
 }
 
 func (c *Clock) MoneySpent() timefuncs.Amount {
-	fmt.Printf("Spent %v, Total %v, Cost %v\n",
-		c.timeSpent,
-		c.totalTime,
-		c.totalCost,
-	)
 	return (c.totalCost / timefuncs.Amount(c.totalTime)) * timefuncs.Amount(c.timeSpent)
 }
 
 func (*Clock) View(ctrl moria.Controller) moria.View {
 	c := ctrl.(*Clock)
-
-	fmt.Println(c.totalCost)
 
 	styleRed := js.M{}
 	if c.timeSpent > c.totalTime {
