@@ -13,6 +13,7 @@ import (
 
 var (
 	m     = moria.M
+	s     = moria.S
 	fps30 = time.Tick(time.Second / 30)
 )
 
@@ -78,24 +79,24 @@ func (*Clock) View(ctrl moria.Controller) moria.View {
 		maybeRed["style"] = "color:darkred;"
 	}
 
-	pauseSigil := moria.S("\u23F8")
+	pauseSigil := s("\u23F8")
 	if !c.running {
-		pauseSigil = moria.S("\u25B6")
+		pauseSigil = s("\u25B6")
 	}
 
 	return m("div#wrapper", nil,
-		m("h1", nil, moria.S("How much is this meeting costing?")),
+		m("h1", nil, s("How much is this meeting costing?")),
 		m("table#display", nil,
 			m("tr", nil,
-				m("label.copy[for='totalTime']", nil, moria.S("Time Elapsed")),
+				m("label.copy[for='totalTime']", nil, s("Time Elapsed")),
 				m("input#totalTime", js.M{
 					"value": timefuncs.FormatDuration(c.timeSpent),
 					"style": maybeRed["style"],
 				})),
 			m("tr", nil,
-				m("label.copy.costIntro", nil, moria.S("Cost")),
+				m("label.copy.costIntro", nil, s("Cost")),
 				m("span.cost.money", maybeRed,
-					moria.S(c.MoneySpent().String())),
+					s(c.MoneySpent().String())),
 			)),
 		m("button#pause.control", js.M{
 			"config": mithril.RouteConfig,
@@ -118,5 +119,5 @@ func (*Clock) View(ctrl moria.Controller) moria.View {
 				)
 			},
 		},
-			moria.S("\u25a0")))
+			s("\u25a0")))
 }
