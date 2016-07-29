@@ -18,6 +18,7 @@ body,html {
     content-align: center;
 }
 
+
 h1 {
     padding: 10px;
     margin: 0px auto;
@@ -30,40 +31,64 @@ h1 {
 }
 
 #display {
-    padding: auto;
+    margin: 0px 10px;
+    line-height: 2;
 }
 
 .cost {
     font-size: 28px;
-    float: right;
 }
+
+.bigCost {
+    font-size: 48px;
+    align: right;
+}
+
 
 #totalTime {
     background: inherit;
     font-size: 28px;
-    text-align: right;
-    align-content: right;
+    text-align: center;
+    width: 50%;
 }
+
+input[type=number] {
+    width: 100px;
+}
+
+.subHeading {
+    margin: 10px;
+    line-height: 2;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
 
 .money:before {
     content:"$"
 }
 
-.chooser {
+table {
     border: solid 1px black;
     border-collapse: collapse;
     margin: auto;
     padding: 10px;
-    min-width: 100%;
+    min-width: 97%;
 }
 
+#peopleIntro {
+    margin: 10px;
+}
 
-.chooser td,th {
+table td,th {
     border: solid 1px darkgrey;
     padding: 5px ;
 }
 
-.chooser th {
+table th {
     background: skyblue;
 }
 
@@ -79,10 +104,14 @@ h1 {
 .count {
     font-size:x-large;
     text-align: right;
-    border: none;
     margin: none;
     padding: none;
     background: inherit;
+    border: solid 1px;
+}
+
+td.rightCell {
+    text-align: right;
 }
 
 .control {
@@ -92,7 +121,15 @@ h1 {
     min-width: 200px;
 }
 
+#meeting {
+    margin: auto;
+}
+
 #start {
+    margin: 10px 10px;
+    float:right;
+    wrapping: lang;
+    height: 4em;
 }
 
 #pause {
