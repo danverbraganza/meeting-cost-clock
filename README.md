@@ -1,7 +1,7 @@
 # Meeting Cost Clock
 A clock that tells you how much a meeting is costing you, written in [Go](https://golang.org) and [Mithril](http://mithril.js.org) via [Moria](https://github.com/danverbraganza/go-mithril).
 
-Try out the [meeting cost clock live](https://danverbraganza.com/tools/meeting-cost-calculator) now!
+Try out the [meeting cost clock live](https://danverbraganza.com/tools/meeting-cost-clock) now!
 
 ## Do you have meeting-itis?
 
