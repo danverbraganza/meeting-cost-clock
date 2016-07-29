@@ -1,5 +1,0 @@
- // The graph name and the semicolons are optional
-digraph graphname {
-       Go -> Moria  -> GopherJS -> Client;
-       Mithril -> Client;
-       }
