@@ -26,7 +26,7 @@ know that precious time is being wasted.
 
 > But doesn't something like this already exist?
 
-Well, its' true. After I had the idea of making this, I found out that a number of tools 
+Well, it's true. After I had the idea of making this, I found out that a number of tools 
 built around estimating meeting costs already exist. So why did I decide to build another one myself?
 
 The first reason is it's such a simple idea to reimplement that it hardly makes a difference that
