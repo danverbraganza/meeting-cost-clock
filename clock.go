@@ -7,10 +7,6 @@ import (
 	"meeting-cost-clock/components"
 )
 
-var (
-	m = moria.M
-)
-
 func main() {
 	myComponent := &components.Chooser{}
 	myClock := &components.Clock{}
@@ -18,7 +14,7 @@ func main() {
 	moria.Route(
 		dom.GetWindow().Document().QuerySelector("body"), "/",
 		map[string]moria.Component{
-			"/": myComponent,
+			"/":                      myComponent,
 			"/clock/:duration/:cost": myClock,
 		})
 }

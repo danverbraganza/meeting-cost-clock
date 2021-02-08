@@ -11,9 +11,10 @@ import (
 	"github.com/gopherjs/gopherjs/js"
 )
 
+var m = moria.M
+type s = moria.S
+
 var (
-	m     = moria.M
-	s     = moria.S
 	fps30 = time.Tick(time.Second / 30)
 )
 
